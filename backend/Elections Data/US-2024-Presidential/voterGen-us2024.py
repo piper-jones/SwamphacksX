@@ -29,4 +29,62 @@ voters = pd.DataFrame({
     'Income': income,
 })
 
-voters.to_csv('C:\\Users\\piper\\VS Code\\SwamphacksX\\backend\\Elections Data\\US-2024-Presidential\\us-2024-data.csv', index=False)
+
+#Assigning probabilities for each demographic
+# [Republican, Democrat, Other]
+
+ageProbabilities = {
+    '18-24': [0.43, 0.54, 0.03],  
+    '25-29': [0.45, 0.53, 0.02],  
+    '30-39': [0.45, 0.51, 0.04],  
+    '40-49': [0.49, 0.49, 0.02],  
+    '50-64': [0.56, 0.43, 0.01],  
+    '65+': [0.50, 0.49, 0.01],    
+}
+
+genderProbabilities = {
+    'Male': [0.55, 0.43, 0.02], 
+    'Female': [0.45, 0.53, 0.02],  
+}
+
+racePobabilities = {
+    'White': [0.57, 0.42, 0.01], 
+    'Black': [0.13, 0.86, 0.01],  
+    'Hispanic': [0.46, 0.51, 0.03],  
+    'Asian': [0.41, 0.55, 0.04],   
+    'Other': [0.52, 0.44, 0.04], 
+}
+
+incomeProbabilities = {
+    'Low': [0.50, 0.48, 0.02], 
+    'Medium': [0.52, 0.46, 0.02], 
+    'High': [0.47, 0.51, 0.02],   
+}
+
+
+# Initialize a column for storing the final probabilities
+voters['Probabilities'] = None
+
+# Assign probabilities based on age or income, depending on the approach
+voters['Probabilities'] = voters.apply(
+    lambda row: 
+        # Using multiple demographic factors for probability distribution
+        ageProbabilities[row['Age']] if row['Income'] == 'Low' else
+        (genderProbabilities[row['Gender']] if row['Race'] == 'White' else
+         (incomeProbabilities[row['Income']])),
+    axis=1
+)
+
+# Simulate each voter's choice based on the assigned probabilities
+candidates = ['Republican', 'Democrat', 'Third Party']  
+choices = []
+
+for i, row in voters.iterrows():
+    probabilities = row['Probabilities']
+    choice = np.random.choice(candidates, p=probabilities)
+    choices.append(choice)
+
+voters['Voter_Choice'] = choices
+    
+
+voters.to_csv('C:\\Users\\piper\\VS Code\\SwamphacksX\\backend\\Elections Data\\US-2024-Presidential\\demData-us2024.csv', index=False)
