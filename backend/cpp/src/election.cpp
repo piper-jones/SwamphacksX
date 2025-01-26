@@ -1,5 +1,5 @@
-#include <.\election.h>
 #pragma once
+#include ".\election.h"
 #include<iostream>
 #include <string>
 #include <vector>
