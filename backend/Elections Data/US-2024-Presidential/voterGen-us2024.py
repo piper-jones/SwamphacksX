@@ -76,7 +76,7 @@ voters['Probabilities'] = voters.apply(
 )
 
 # Simulate each voter's choice based on the assigned probabilities
-candidates = ['Republican', 'Democrat', 'Third Party']  
+candidates = ['Republican', 'Democrat', 'We The People', 'Green Party']  
 choices = []
 
 for i, row in voters.iterrows():
